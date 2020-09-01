@@ -84,9 +84,8 @@ class MLP:
 
     def fit(self, X, Y, p=.25):
         """
-                X, Y: input and ouput training samples.
-                p: fraction (default 20%) of X and Y to be used as validation set.
-
+        X, Y: input and ouput training samples.
+        p: fraction (default 20%) of X and Y to be used as validation set.
         """
 
         X_tr, Y_tr, X_va, Y_va = self.split(X, Y, p)
@@ -223,23 +222,23 @@ class MLP:
                 f"[validation error]: overfitting starting from epoch {epoch}")
             logger.info(f"Backtracked to network state at epoch {e_snap}")
 
-        return {	"tr_err_hist": tr_err_history,
-                 "tr_err": tr_err_history[-1],
-                 "va_err_hist": va_err_history,
-                 "va_err": va_err_history[-1] if va_err_history else [],
-                 "tr_acc_hist": tr_acc_history,
-                 "va_acc_hist": va_acc_history,
-                 "tr_acc": tr_acc_history[-1] if tr_acc_history else [],
-                 "va_acc": va_acc_history[-1] if va_acc_history else [],
-                 "loss_hist": loss_history,
-                 "loss": loss_history[-1] if loss_history else []
-                 }
+        return {
+            "tr_err_hist": tr_err_history,
+            "tr_err": tr_err_history[-1],
+            "va_err_hist": va_err_history,
+            "va_err": va_err_history[-1] if va_err_history else [],
+            "tr_acc_hist": tr_acc_history,
+            "va_acc_hist": va_acc_history,
+            "tr_acc": tr_acc_history[-1] if tr_acc_history else [],
+            "va_acc": va_acc_history[-1] if va_acc_history else [],
+            "loss_hist": loss_history,
+            "loss": loss_history[-1] if loss_history else []
+        }
 
     def predict(self, X):
         output = X
         for l in range(self._nlayers-2):
-            output = self._activation.apply(
-                output.dot(self._ws[l]) + self._bs[l])
+            output = self._activation.apply(output.dot(self._ws[l]) + self._bs[l])
         output = output.dot(self._ws[-1] + self._bs[-1])
         output = self._activation_out.apply(output)
         return output

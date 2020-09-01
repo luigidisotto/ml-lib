@@ -79,8 +79,8 @@ class HyperOptimizer:
 
     def modelFactory(self, H):
         """  
-                H: the hyperparameters' space to be explored
-                return: a list of models for every hyparameters combination
+        H: the hyperparameters' space to be explored
+        return: a list of models for every hyparameters combination
         """
         self._models = []
         for eta in H['learning_rate']:
@@ -116,10 +116,11 @@ class HyperOptimizer:
                 if score == 'test_err':
                     ts.append(err)
 
-        return {'valid_err': np.mean(vs) if vs else [],
-                'test_err': np.mean(ts) if ts else [],
-                'accuracy': np.mean(accs) if accs else []
-                }
+        return {
+            'valid_err': np.mean(vs) if vs else [],
+            'test_err': np.mean(ts) if ts else [],
+            'accuracy': np.mean(accs) if accs else []
+        }
 
     def partiallyAppliedRiskEstimation(self, model):
         """
@@ -137,7 +138,7 @@ class HyperOptimizer:
             if score == 'valid_err':
                 # model giving lowest validation error
                 m = min([(self._risks[j]['valid_err'], self._models[j])
-                         for j in range(len(self._models))], key=lambda t: t[0])
+                                for j in range(len(self._models))], key=lambda t: t[0])
                 self.bestmodel.append((m[1], 'valid_err'))
             if score == 'test_err':
                 # model giving lowest test error
@@ -161,18 +162,13 @@ class HyperOptimizer:
 
             if self._task == 'classification':
                 logger.info(
-                    '[model assessment]: ' + str + '--' + score + ', tr = {}, vl = {}, loss = {}, tr. acc. = {}, va. acc = {}'.format(perf['tr_err'],
-                                                                                                                                      perf[
-                        'va_err'],
-                        perf['loss'],
-                        perf['tr_acc'],
-                        perf['va_acc'])
+                    f"[model assessment]: {str} -- {score}, tr = {perf['tr_err']}, \
+                    vl = {perf['va_err']}, loss = {perf['loss']}, tr. acc. = {perf['tr_acc']}, va. acc = {perf['va_acc']}"
                 )
             else:
                 logger.info(
-                    '[model assessment]: ' + str + '--' + score + ', tr = {}, vl = {}, loss = {}'.format(perf['tr_err'],
-                                                                                                         perf['va_err'],
-                                                                                                         perf['loss'])
+                    f"[model assessment]: {str} -- {score}, \
+                    tr = {perf['tr_err']}, vl = {perf['va_err']}, loss = {perf['loss']}"
                 )
 
             sys.stdout.flush()
@@ -180,18 +176,16 @@ class HyperOptimizer:
             err = model.score(self._X_ts, self._Y_ts)
 
             if self._task == 'regression':
-                logger.info('[test error]: ' + str +
-                            '--' + score + ', ts = {err}')
+                logger.info(f'[test error]: {str} -- {score}, ts = {err}')
             else:
                 Y_pred = model.predict(self._X_ts)
                 acc = model.accuracy(self._Y_ts, (Y_pred >= 0.5).astype(int))
-                logger.info('[test error]: ' + str + '--' +
-                            score + ', ts = {err}, acc = {acc}')
-                plot_accuracy(perf, str + '--' + score + '-ACCURACY')
+                logger.info('f[test error]: {str} -- {score}, ts = {err}, acc = {acc}')
+                plot_accuracy(perf, f'{str} -- {score} -ACCURACY')
 
             sys.stdout.flush()
 
-            plot_perf(perf, str+'--'+score)
+            plot_perf(perf, f'{str} -- {score}')
 
     def blindtest(self, X_blind):
         for m in self.bestmodel:
@@ -201,8 +195,8 @@ class HyperOptimizer:
             logger.info('[blind test]: ' + str)
             sys.stdout.flush()
             Y_blind = model.predict(X_blind)
-            to_csv('blind-test-'+str+'-'+score, y=Y_blind)
-            scatter_plot('scatter-plot'+str+'--'+score, Y_blind)
+            to_csv(f'blind-test-{str}-{score}, y={Y_blind}')
+            scatter_plot(f'scatter-plot {str} -- {score}, {Y_blind}')
 
     def hoptimize(self):
         self.modelSelection()
