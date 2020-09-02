@@ -2,7 +2,7 @@
 
 pip install -r requirements.txt
 
-python3 monk-bench.py \
+python monk-bench.py \
     --bench_name monks-3 \
     --task classification \
     --lr 0.1 \
