@@ -26,7 +26,7 @@ it will also install all required packages from ```requirements.txt```.
 Take a look at the commands defined in [run_monk_bench.sh](run_monk_bench.sh) to change the monks' task, e.g. monks-1, monks-2 or monks-3.
 
 ```bash
-python3 monk-bench.py \
+python monk-bench.py \
     --bench_name monks-3 \
     --task classification \
     --lr 0.1 \
